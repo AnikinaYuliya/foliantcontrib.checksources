@@ -8,6 +8,10 @@ import os
 from foliant.preprocessors.utils.preprocessor_ext import BasePreprocessorExt
 from foliant.utils import output
 
+from json import load
+
+from pathlib import Path
+
 
 class Preprocessor(BasePreprocessorExt):
     defaults = {
@@ -104,12 +108,30 @@ class Preprocessor(BasePreprocessorExt):
 
         self.logger.debug(f'List of files mentioned in not_in_chapters: {not_in_chapters_paths}')
 
+        def _fill_included_files():
+
+            with open(f'{self.working_dir}/static/includes_map.json', 'r',encoding='utf8') as f:
+                data = load(f)
+            files_paths=set()
+            for map_item in data:
+                files_paths|=set(map_item['includes'])
+            files_paths=list(files_paths)
+            for path in files_paths:
+                included_files_paths.append(Path(path).resolve())
+            
+        included_files_paths=[]
+
+        if os.path.exists(f'{self.working_dir}/static/includes_map.json'):
+            _fill_included_files()
+        
+        self.logger.debug(f'List of files mentioned in includes map: {included_files_paths}')
+
         for markdown_file_path in self.src_dir.rglob('*.md'):
             markdown_file_path = markdown_file_path.resolve()
 
             self.logger.debug(f'Checking if the file is mentioned in chapters: {markdown_file_path}')
 
-            if markdown_file_path in chapters_files_paths or markdown_file_path in not_in_chapters_paths:
+            if markdown_file_path in chapters_files_paths or markdown_file_path in not_in_chapters_paths or markdown_file_path in included_files_paths:
                 self.logger.debug('Mentioned, keeping')
 
             else:
