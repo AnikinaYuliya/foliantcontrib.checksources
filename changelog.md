@@ -1,3 +1,7 @@
+# 1.0.4
+
+-   Added integration with preprocessor Includes. Files that are included in other files and not mentioned in `chapters` or `not_in_chapters` do not cause warnings.
+
 # 1.0.3
 
 -   Checking for duplicate files in the chapters is not strictly performed by default.
