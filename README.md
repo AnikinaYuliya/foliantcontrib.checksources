@@ -45,7 +45,7 @@ preprocessors:
           - duplicate
 ```
 
-## Intergation with preprocessor Includes
+## Integration with preprocessor Includes
 
 All source files that are not mentioned in `chapters` or `not_in_chapters` cause warnings.
 
