@@ -1,3 +1,7 @@
+# 1.0.5
+
+-   Included files in projects built by MultiProject do not cause warnings.
+
 # 1.0.4
 
 -   Added integration with preprocessor Includes. Files that are included in other files and not mentioned in `chapters` or `not_in_chapters` do not cause warnings.
