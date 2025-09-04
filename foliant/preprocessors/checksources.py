@@ -126,24 +126,25 @@ class Preprocessor(BasePreprocessorExt):
 
             files_list=set()
             if data:
+                src_dir=str(self.config['src_dir'])
                 for subproj in data:
                     for subproj_name,subproj_map in subproj.items():
-                        path='src/'
+                        path=src_dir
                         if subproj_name!='static':
-                            path+=subproj_name+'/'
+                            path+=f'/{subproj_name}'
                         for map_item in subproj_map:
                             included_files=map_item['includes']
                             for file in included_files:
-                                files_list.add(Path(file.replace('src/',path)).resolve())
+                                files_list.add(Path(file.replace(Path(file).parts[0],path)).resolve())
             return list(files_list)
         
         included_files_paths=[]
 
         if os.path.exists(f'{self.working_dir}/static/multiproject_includes_map.json'):
-            self.logger.debug('Processing multiproject includes map')
+            self.logger.debug('Processing of multiproject includes map')
             included_files_paths=_fill_included_files_multiproject()
         elif os.path.exists(f'{self.working_dir}/static/includes_map.json'):
-            self.logger.debug('Processing includes map')
+            self.logger.debug('Processing of includes map')
             _fill_included_files()
         
         self.logger.debug(f'List of files mentioned in includes map: {included_files_paths}')
